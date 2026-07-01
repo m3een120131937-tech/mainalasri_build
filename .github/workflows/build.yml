@@ -20,11 +20,15 @@ jobs:
           channel: 'stable'
 
       - name: Install Dependencies
+        run: flutter pub get
+
+      # هذا هو الجزء الجديد والمهم الذي سيحل مشكلة "رفض الإذن"
+      - name: Make gradlew executable
         run: |
-          flutter pub get
+          cd android
+          chmod +x gradlew
 
       - name: Build APK
-        # هنا التعديل: ننتقل لمجلد android ونقوم بالبناء من هناك
         run: |
           cd android
           ./gradlew assembleRelease
