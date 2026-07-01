@@ -1,4 +1,4 @@
-name: Build Flutter APK (Final Release)
+name: Build Flutter APK
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
-    env: 
+    runs-on: ubuntu-latest
+    env:
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -24,14 +24,17 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          flutter clean
           flutter pub get
+          # التأكد من عمل Flutter للصيغ المطلوبة
+          flutter clean
+          flutter pub cache repair
 
-      - name: Build Final Release APK
-        run: flutter build apk --release
+      - name: Build APK
+        # استخدام الأمر المباشر للبناء مع تخطي فحص AndroidX مؤقتاً
+        run: flutter build apk --release --no-shrink
 
-      - name: Upload Final APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: final-app-release
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
