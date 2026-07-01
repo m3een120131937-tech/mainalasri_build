@@ -10,6 +10,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
+      - name: Fix permissions
+        run: |
+          chmod +x gradlew
+          chmod +x android/gradlew
+          
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -20,9 +25,6 @@ jobs:
         uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.13.9'
-          
-      - name: Enable Flutter Web
-        run: flutter config --enable-web
           
       - name: Get dependencies
         run: flutter pub get
