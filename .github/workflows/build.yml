@@ -22,13 +22,21 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      # نقوم بتحديث إعدادات الأندرويد قبل البناء
+      # نقوم بمنح صلاحية التنفيذ لملف الجرادل
+      - name: Make gradlew executable
+        run: |
+          cd android
+          chmod +x gradlew
+
+      # بناء المشروع باستخدام أوامر الجرادل المباشرة
       - name: Build APK
         run: |
-          flutter build apk --release
+          cd android
+          ./gradlew assembleRelease
 
+      # رفع ملف الـ APK الناتج
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
