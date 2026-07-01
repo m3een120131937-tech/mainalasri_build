@@ -1,39 +1,33 @@
-name: Build APK
+name: Build Android APK (Final Release)
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '11'
-          
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+          java-version: '17'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build Final Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload Final APK
+        uses: actions/upload-artifact@v4
         with:
-          flutter-version: '3.10.6'
-          
-      - name: Enable Flutter
-        run: |
-          flutter config --enable-web
-          flutter precache
-          
-      - name: Get dependencies
-        run: flutter pub get
-        
-      - name: Build APK
-        run: flutter build apk --release
-        
-      - name: Upload APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: Mainalasri-Technician-Pro
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: final-app-release
+          path: app/build/outputs/apk/release/*.apk
