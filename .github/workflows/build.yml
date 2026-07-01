@@ -1,4 +1,4 @@
-name: Build Android APK (Final Release)
+name: Build Flutter APK (Final Release)
 
 on:
   push:
@@ -14,20 +14,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          channel: 'stable'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Install Dependencies
+        run: flutter pub get
 
       - name: Build Final Release APK
-        run: ./gradlew assembleRelease
+        run: flutter build apk --release
 
       - name: Upload Final APK
         uses: actions/upload-artifact@v4
         with:
           name: final-app-release
-          path: app/build/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
