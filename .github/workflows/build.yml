@@ -1,33 +1,27 @@
 name: Build APK
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
       
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.24.0'
-          channel: 'stable'
+          flutter-version: '3.13.9'
           
       - name: Install dependencies
-        run: |
-          flutter pub get
-          
+        run: flutter pub get
+        
       - name: Build APK
-        run: |
-          flutter build apk --release --no-tree-shake-icons
-          
+        run: flutter build apk --release
+        
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: Mainalasri-Technician-Pro
           path: build/app/outputs/flutter-apk/app-release.apk
-          compression-level: 0
