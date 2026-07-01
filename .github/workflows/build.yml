@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    # إضافة هذا السطر لحل مشكلة Node.js التي ظهرت لك
-    env:
+    runs-on: ubuntu-latest 
+    env: 
       ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
