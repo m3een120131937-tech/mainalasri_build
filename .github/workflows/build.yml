@@ -9,10 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
+    
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,16 +22,15 @@ jobs:
       - name: Install Dependencies
         run: |
           flutter pub get
-          # التأكد من عمل Flutter للصيغ المطلوبة
-          flutter clean
-          flutter pub cache repair
 
       - name: Build APK
-        # استخدام الأمر المباشر للبناء مع تخطي فحص AndroidX مؤقتاً
-        run: flutter build apk --release --no-shrink
+        # هنا التعديل: ننتقل لمجلد android ونقوم بالبناء من هناك
+        run: |
+          cd android
+          ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
